@@ -41,29 +41,33 @@ client.on("message", function (message) {
 
       console.log(isValid);
       if (isValid) {
-        const attachment = new Discord.MessageAttachment(
-          media.raw,
-          `meme.${extention}`
-        );
-        // Send the attachment in the message channel with a content
-        message.channel
-          .send(`${message.author}, here are your memes!`, attachment)
-          .then((result) => {
-            // result.
+        try {
+          const attachment = new Discord.MessageAttachment(
+            media.raw,
+            `meme.${extention}`
+          );
+          // Send the attachment in the message channel with a content
+          message.channel
+            .send(`${message.author}, here are your memes!`, attachment)
+            .then((result) => {
+              // result.
 
-            message
-              .delete()
-              .then((result) => {
-                // console.log(result);
-                console.log("deleted");
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+              message
+                .delete()
+                .then((result) => {
+                  // console.log(result);
+                  console.log("deleted");
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } catch (error) {
+          console.log(error);
+        }
       }
     })
     .catch((err) => {
