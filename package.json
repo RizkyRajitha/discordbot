@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.20.0",
     "discord.js": "^12.3.1",
     "node-fetch": "^2.6.1"
   }
