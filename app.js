@@ -1,10 +1,19 @@
 const Discord = require("discord.js");
 const fetch = require("node-fetch");
-const client = new Discord.Client();
-const fs = require("fs");
+const express = require("express");
+
+const port = process.env.PORT || 3001;
+
 const BOT_TOKEN = process.env.BOT_TOKEN || require("./config.json").BOT_TOKEN;
 
 const extentions = ["jpeg", "jpg", "gif", "png", "mp4", "webm", "webp"];
+
+const app = express();
+const client = new Discord.Client();
+
+app.get("/", (req, res) => {
+  res.send("bot should be up now");
+});
 
 client.on("ready", () => console.log("Game On 😎"));
 
@@ -92,5 +101,9 @@ client.on("message", function (message) {
 //     });
 //   });
 // };
+
+app.listen(port, () => {
+  console.log("listning on 3001");
+});
 
 client.login(BOT_TOKEN);
