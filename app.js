@@ -28,6 +28,20 @@ client.on("message", function (message) {
   // we ignore it
   if (!message.guild) return;
 
+  if (message.content === "^help") {
+    let reply = `
+    Hello , i am HeshanBot 
+    commands:
+    ^join : join to voice channel\n   ^help : help\n${sounds
+      .map((ele) => `   ^${ele} : ${ele} \n`)
+      .join("")}
+    thanks you
+    `;
+    console.log(reply);
+    message.reply(reply);
+    return;
+  }
+
   if (message.content.startsWith("^") && message.channel.name === "general") {
     console.log("voice cn");
     console.log(message.channel.name);
@@ -75,8 +89,10 @@ client.on("message", function (message) {
                 console.log("joined");
                 console.log(message.author);
                 message.channel.send(
-                  `${message.author}, successfully connected ${
-                    message.author.username === "Rizky" ? "Lord" : ""
+                  `${message.author}, successfully connected  ${
+                    message.author.username === "Rizky"
+                      ? "Lord"
+                      : "\nuse ^help for more information "
                   }`
                 );
                 // dispatcher.
