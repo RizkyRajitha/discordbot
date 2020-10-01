@@ -11,7 +11,25 @@ const BOT_TOKEN = process.env.BOT_TOKEN || require("./config.json").BOT_TOKEN;
 
 const extentions = ["jpeg", "jpg", "gif", "png", "mp4", "webm", "webp"];
 
-const sounds = ["quak", "nani", "wow"];
+const sounds = [
+  "quak",
+  "nani",
+  "wow",
+  "dbrw",
+  "gtacj",
+  "coffinpls",
+  "airhorn",
+  "sad",
+  "pornhub",
+  "muted",
+  "witcher",
+  "fart",
+  "gay",
+  "success",
+  "waiting",
+  "smf",
+  "ohnono",
+];
 
 let voiceConnection;
 let joined = false;
