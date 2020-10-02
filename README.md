@@ -11,3 +11,5 @@ add different types of audio files
 stop plauing sound
 
 2 sounds playing same time ?  
+
+add disconnect command
