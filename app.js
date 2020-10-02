@@ -23,8 +23,6 @@ const sounds = [
   "pornhub",
   "muted",
   "witcher",
-  "fart",
-  "gay",
   "success",
   "waiting",
   "smf",
