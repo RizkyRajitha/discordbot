@@ -36,6 +36,34 @@ app.get("/", (req, res) => {
   res.send("bot should be up now");
 });
 
+app.get("/play", (req, res) => {
+  // voiceConnection.play(`./${msg}.mp3`);
+
+  if (process.env.Secret !== req.headers.authorization) {
+    res.status(403).json({ msg: "ආ.......... රියලි" });
+    return;
+  }
+  console.log(req.query.sound);
+
+  let msg = req.query.sound; // message.content.substring(1);
+  console.log(msg);
+
+  if (!voiceConnection) {
+    res.status(404).json({ msg: "හරි හරි හරි...." });
+    return;
+  }
+
+  if (sounds.includes(msg)) {
+    voiceConnection.play(`./${msg}.mp3`);
+    res.json({ msg: "කුපිරි" });
+  } else {
+    res.status(404).json({ msg: "ඒ මෙයා එක්ක බැ ඒ " });
+    // res.send("i cant understand you ");
+
+    //message.reply(`i cant understand you `);
+  }
+});
+
 client.on("ready", () => console.log("Game On 😎"));
 client.on("disconnect", () => console.log("diconnected"));
 client.on("message", function (message) {
