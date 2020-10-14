@@ -39,10 +39,10 @@ app.get("/", (req, res) => {
 app.get("/play", (req, res) => {
   // voiceConnection.play(`./${msg}.mp3`);
 
-  if (process.env.Secret !== req.headers.authorization) {
-    res.status(403).json({ msg: "ආ.......... රියලි" });
-    return;
-  }
+  // if (process.env.Secret !== req.headers.authorization) {
+  //   res.status(403).json({ msg: "ආ.......... රියලි" });
+  //   return;
+  // }
   console.log(req.query.sound);
 
   let msg = req.query.sound; // message.content.substring(1);
