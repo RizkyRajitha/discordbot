@@ -241,7 +241,7 @@ client.on("message", function (message) {
 //   });
 // };
 
-app.listen(port,'192.168.1.2', () => {
+app.listen(port, () => {
   console.log("listning on 3001");
 });
 
