@@ -27,6 +27,7 @@ const sounds = [
   "waiting",
   "smf",
   "ohnono",
+  "tenet"
 ];
 
 let voiceConnection;
@@ -39,10 +40,10 @@ app.get("/", (req, res) => {
 app.get("/play", (req, res) => {
   // voiceConnection.play(`./${msg}.mp3`);
 
-  // if (process.env.Secret !== req.headers.authorization) {
-  //   res.status(403).json({ msg: "ආ.......... රියලි" });
-  //   return;
-  // }
+  if (process.env.Secret !== req.headers.authorization) {
+    res.status(403).json({ msg: "ආ.......... රියලි" });
+    return;
+  }
   console.log(req.query.sound);
 
   let msg = req.query.sound; // message.content.substring(1);
@@ -240,7 +241,7 @@ client.on("message", function (message) {
 //   });
 // };
 
-app.listen(port, () => {
+app.listen(port,'192.168.1.2', () => {
   console.log("listning on 3001");
 });
 
