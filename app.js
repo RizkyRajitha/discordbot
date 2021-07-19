@@ -4,6 +4,8 @@ const fs = require("fs");
 const express = require("express");
 const app = express();
 
+const emoji = require("./emojilist").emoj;
+
 const client = new Discord.Client();
 
 const port = process.env.PORT || 3001;
@@ -120,6 +122,10 @@ client.on("message", async function (message) {
       console.log(msg);
       if (sounds.includes(msg)) {
         voiceConnection.play(`./sounds/${msg}.mp3`);
+
+        let emojinum = Math.floor(Math.random() * 10000) % emoji.length;
+        // console.log();
+        message.react(emoji[emojinum]);
       } else {
         message.reply(`i can't understand you \nඒ මෙයා එක්ක බැ ඒ `);
       }

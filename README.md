@@ -12,4 +12,4 @@ stop plauing sound
 
 2 sounds playing same time ?  
 
-add disconnect command
+add disconnect command ✅
