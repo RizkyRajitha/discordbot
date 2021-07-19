@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const fetch = require("node-fetch");
+const fs = require("fs");
 const express = require("express");
 const app = express();
 
@@ -11,24 +12,27 @@ const BOT_TOKEN = process.env.BOT_TOKEN || require("./config.json").BOT_TOKEN;
 
 const extentions = ["jpeg", "jpg", "gif", "png", "mp4", "webm", "webp"];
 
-const sounds = [
-  "quak",
-  "nani",
-  "wow",
-  "dbrw",
-  "gtacj",
-  "coffinpls",
-  "airhorn",
-  "sad",
-  "pornhub",
-  "muted",
-  "witcher",
-  "success",
-  "waiting",
-  "smf",
-  "ohnono",
-  "tenet"
-];
+// const sounds = [
+//   "quak",
+//   "nani",
+//   "wow",
+//   "dbrw",
+//   "gtacj",
+//   "coffinpls",
+//   "airhorn",
+//   "sad",
+//   "ph",
+//   "muted",
+//   "witcher",
+//   "success",
+//   "waiting",
+//   "smf",
+//   "ohnono",
+//   "tenet",
+// ];
+
+let sounds = fs.readdirSync("./sounds").map((e) => e.split(".")[0]);
+console.log(sounds);
 
 let voiceConnection;
 let joined = false;
@@ -37,37 +41,38 @@ app.get("/", (req, res) => {
   res.send("bot should be up now");
 });
 
-app.get("/play", (req, res) => {
-  // voiceConnection.play(`./${msg}.mp3`);
+// app.get("/play", (req, res) => {
+//   // voiceConnection.play(`./${msg}.mp3`);
 
-  if (process.env.Secret !== req.headers.authorization) {
-    res.status(403).json({ msg: "ආ.......... රියලි" });
-    return;
-  }
-  console.log(req.query.sound);
+//   if (process.env.Secret !== req.headers.authorization) {
+//     res.status(403).json({ msg: "ආ.......... රියලි" });
+//     return;
+//   }
+//   console.log(req.query.sound);
 
-  let msg = req.query.sound; // message.content.substring(1);
-  console.log(msg);
+//   let msg = req.query.sound; // message.content.substring(1);
+//   console.log(msg);
 
-  if (!voiceConnection) {
-    res.status(404).json({ msg: "හරි හරි හරි...." });
-    return;
-  }
+//   if (!voiceConnection) {
+//     res.status(404).json({ msg: "හරි හරි හරි...." });
+//     return;
+//   }
 
-  if (sounds.includes(msg)) {
-    voiceConnection.play(`./${msg}.mp3`);
-    res.json({ msg: "කුපිරි" });
-  } else {
-    res.status(404).json({ msg: "ඒ මෙයා එක්ක බැ ඒ " });
-    // res.send("i cant understand you ");
+//   if (sounds.includes(msg)) {
+//     voiceConnection.play(`./${msg}.mp3`);
+//     res.json({ msg: "කුපිරි" });
+//   } else {
+//     res.status(404).json({ msg: "ඒ මෙයා එක්ක බැ ඒ " });
+//     // res.send("i cant understand you ");
 
-    //message.reply(`i cant understand you `);
-  }
-});
+//     //message.reply(`i cant understand you `);
+//   }
+// });
 
 client.on("ready", () => console.log("Game On 😎"));
 client.on("disconnect", () => console.log("diconnected"));
-client.on("message", function (message) {
+
+client.on("message", async function (message) {
   // console.log(message.guild);
   // Voice only works in guilds, if the message does not come from a guild,
   // we ignore it
@@ -75,14 +80,15 @@ client.on("message", function (message) {
 
   if (message.content === "^help") {
     let reply = `
-    Hello , i am HeshanBot 
+    Hello , i am HeshanBot කැපක් ගමුතේ
     commands:
-    ^join : join to voice channel\n   ^help : help\n${sounds
+    ^join : join to voice channel\n   ^help : help\n   ^disconnect : disconnect\n${sounds
       .map((ele) => `   ^${ele} : ${ele} \n`)
       .join("")}
     thanks you
+    කුපිරි
     `;
-    console.log(reply);
+    // console.log(reply);
     message.reply(reply);
     return;
   }
@@ -97,67 +103,69 @@ client.on("message", function (message) {
       // console.log(sounds);
       // console.log(`^${message.content}`);
       let msg = message.content.substring(1);
+
+      if (message.content === "^disconnect") {
+        // let reply = `යන්නං`;
+
+        console.log(message.content);
+        const disconnectGif = new Discord.MessageAttachment(
+          "https://media1.tenor.com/images/5ef0f8e9006d7c459d6817a71ba61c2e/tenor.gif"
+        );
+        await message.reply(disconnectGif);
+        voiceConnection.disconnect();
+
+        return;
+      }
+
       console.log(msg);
       if (sounds.includes(msg)) {
-        voiceConnection.play(`./${msg}.mp3`);
+        voiceConnection.play(`./sounds/${msg}.mp3`);
       } else {
-        message.reply(`i cant understand you `);
+        message.reply(`i can't understand you \nඒ මෙයා එක්ක බැ ඒ `);
       }
-      // if (message.content === "^quak") {
-      //   voiceConnection.play("./quack.mp3");
-      // } else if (message.content === "^nani") {
-      //   voiceConnection.play("./nani.mp3");
-      // } else if (message.content === "^wow") {
-      //   voiceConnection.play("./wow.mp3");
-      // }
     } else {
       if (message.content === "^join") {
         // Only try to join the sender's voice channel if they are in one themselves
-        if (message.member.voice.channel) {
-          console.log("in voice channel");
-          if (voiceConnection) {
-            message.reply("Iam here");
-          } else {
-            message.member.voice.channel
-              .join()
-              .then((connection) => {
-                // const connection =
-                joined = true;
-                voiceConnection = connection;
-                connection.on("disconnect", () => {
-                  console.log("voice diconnected");
-                  joined = false;
-                  voiceConnection = null;
-                });
-                // dispatcher = connection.play("./quack.mp3");
-
-                console.log("joined");
-                console.log(message.author);
-                message.channel.send(
-                  `${message.author}, successfully connected  ${
-                    message.author.username === "Rizky"
-                      ? "Lord"
-                      : "\nuse ^help for more information "
-                  }`
-                );
-                // dispatcher.
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-        } else {
+        if (!message.member.voice.channel) {
           message.reply("You need to join a voice channel first!");
+          return;
+        }
+        console.log("in voice channel");
+
+        try {
+          voiceConnection = await message.member.voice.channel.join();
+          joined = true;
+
+          console.log("joined");
+          console.log(message.author);
+          message.channel.send(
+            `${message.author}, successfully connected  ${
+              message.author.username === "Rizky"
+                ? "Lord"
+                : "\nuse ^help for more information "
+            }`
+          );
+
+          voiceConnection.on("disconnect", () => {
+            console.log("voice diconnected");
+            joined = false;
+            voiceConnection = null;
+          });
+        } catch (error) {
+          console.log(error);
         }
       }
     }
-  } else if (message.channel.name === "meme") {
+  }
+
+  if (message.channel.name === "meme") {
     console.log("meme");
 
     let msgcontent = message.content;
 
     const re = /\.(jpeg|jpg|gif|png|mp4)$/;
-    const urlre = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+    const urlre =
+      /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
 
     // console.log(msgcontent);
     // let e = false;
